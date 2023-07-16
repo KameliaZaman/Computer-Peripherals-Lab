@@ -1,0 +1,52 @@
+#include<Keypad.h>
+byte ledPin = 4;
+
+#define password_size  5
+
+char given_password[password_size] = "2822";
+char input_password[password_size];
+
+const byte nor = 4, noc = 4;
+
+byte count = 0;
+
+char user_keyboard[nor][noc] = {
+  {'7', '8', '9', '/'},
+  {'4', '5', '6', '*'},
+  {'1', '2', '3', '-'},
+  {'#', '0', '=', '+'}
+};
+
+byte row_pins[nor] = {12,11,10,9};
+byte col_pins[noc] = {8,7,6,5};
+
+Keypad custom_keypad = Keypad( makeKeymap(user_keyboard),row_pins,col_pins, nor,noc);
+
+void setup() {
+  // put your setup code here, to run once:
+   pinMode(ledPin,OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+
+  char pressed_key = custom_keypad.getKey();
+
+  if(pressed_key)
+  {
+    input_password[count++] = pressed_key;
+  }
+
+  if(count == password_size-1)
+  {
+    if(strcmp(given_password,input_password)==0)
+    {
+      digitalWrite(ledPin, HIGH);
+      delay(2000);
+      digitalWrite(ledPin, LOW);
+    }
+
+    count = 0;
+  }
+
+}
